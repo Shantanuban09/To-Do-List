@@ -3,6 +3,7 @@ const bodyParser = require("body-Parser");
 const app = express();
 const mongoose = require("mongoose");
 const req = require("express/lib/request");
+const ejs = require("ejs");
 const _ = require("lodash");
 
 app.set("view engine", "ejs");
