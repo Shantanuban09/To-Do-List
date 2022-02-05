@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 const req = require("express/lib/request");
 const ejs = require("ejs");
 const _ = require("lodash");
+const { set } = require('lodash');
 
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -115,12 +116,16 @@ app.post("/", function (req, res) {
 
   if (listName === day) {
     itemToAdd.save();
-    res.redirect("/");
+    setTimeout(() => {
+      res.redirect("/");  
+    }, 25);
   } else {
     List.findOne({ name: listName }, function (err, foundList) {
       foundList.items.push(itemToAdd);
       foundList.save();
-      res.redirect("/" + listName);
+      setTimeout(() => {
+        res.redirect("/" + listName);
+      }, 25);
     });
   }
 });
@@ -137,22 +142,19 @@ app.post("/delete", function (req, res) {
         console.log("Success");
       }
     });
-    res.redirect("/");
+    setTimeout(() => {
+      res.redirect("/");  
+    }, 25);
   } else {
     List.findOneAndUpdate({name: listName}, {$pull: {items: {_id: itemId}}}, function(err, foundList){
       if(!err){
-        res.redirect("/" + listName );
+        setTimeout(() => {
+          res.redirect("/" + listName);
+        }, 25);
       }
     })
-  }
-
-  
-  
+  } 
 });
 
-let port = process.env.PORT;
-if (port == null || port == "") {
-  port = 3000;
-}
-app.listen(port);
+app.listen(3000);
 
