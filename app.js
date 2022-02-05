@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require("express");
 const bodyParser = require("body-Parser");
 const app = express();
@@ -10,7 +11,14 @@ app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
-mongoose.connect("mongodb://localhost:27017/toDoListDB");
+const username = process.env.DB_Username;
+const password = process.env.DB_Password;
+
+const DB = "mongodb+srv://" + username + ":" + password + "@mycluster.vzatu.mongodb.net/toDoListDB?retryWrites=true&w=majority"
+
+mongoose.connect(DB).then(() => {
+  console.log("Connection Success");
+});
 
 const itemSchema = new mongoose.Schema({
   name: {
@@ -142,4 +150,9 @@ app.post("/delete", function (req, res) {
   
 });
 
-app.listen(3000);
+let port = process.env.PORT;
+if (port == null || port == "") {
+  port = 3000;
+}
+app.listen(port);
+
